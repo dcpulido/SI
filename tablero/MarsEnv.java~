@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 
 public class MarsEnv extends Environment {
 
-    public static final int GSize = 7; // grid size
+    public static final int GSize = 8; // grid size
     public static final int GARB  = 16; // garbage code in grid model
-    public static final int BLACK  = 32;
+    public static final int BLACK  = 4;
 
     public static final Term    ns = Literal.parseLiteral("next(slot)");
     public static final Term    pg = Literal.parseLiteral("pick(garb)");
@@ -117,9 +117,9 @@ public class MarsEnv extends Environment {
             add(GARB, 0, GSize-2);
             add(GARB, GSize-1, GSize-1);
 
-            for(int i; i<GSize-1;i++){
-                for(int k; k<GSize-1;k++){
-                    if((i+k)%0==0)add(BLACK,i,k);
+            for(int i=0; i<GSize;i++){
+                for(int k=0; k<GSize;k++){
+                    if((i+k)%2==0)add(BLACK,i,k);
                 }
             }
         }
@@ -221,7 +221,7 @@ public class MarsEnv extends Environment {
 
         public void drawGarb(Graphics g, int x, int y) {
             super.drawObstacle(g, x, y);
-            g.setColor(Color.white;
+            g.setColor(Color.white);
             drawString(g, x, y, defaultFont, "G");
         }
         public void drawBlak(Graphics g, int x, int y) {
