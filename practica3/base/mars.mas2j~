@@ -7,7 +7,7 @@ MAS mars {
 
     environment: QueensEnv
     
-    agents: r2; r1; r0; 
+    agents: //r2; r1; r0; 
         white /Users/mcduran67/Desktop/Queens/r0.asl [beliefs="playAs(0)"];
 
         black /Users/mcduran67/Desktop/Queens/r0.asl [beliefs="playAs(1)"];
