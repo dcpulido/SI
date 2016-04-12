@@ -1,6 +1,7 @@
 Practica final SI
 AGENTES
- 1_cambiar la gestion de turno para utilizar PlayAs
+ 1_cambiar la gestion de turno para utilizar PlayAs TERMINAU
+11_ modificar codigo para que ejecute .kill_agent(_) cuando hay lista vacia y asi n crashee con el random en lista vacia 
  2_crear lista con las posiciones bloqueadas
  3_Diferencia de listas posiciones libres y bloqueadas(2)
  4_Ultima comprobacion justo antes de colocar reina si no vuelta a empezar(2,3)

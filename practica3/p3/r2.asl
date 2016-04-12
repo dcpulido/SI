@@ -81,66 +81,28 @@ checkTurno(Jugador,Turno,0):- not(Jugador=Turno).
 
 turno([Car|Cdr],Car).
 
+playAs(1).
+
 /* Initial goal */
 !start.
 /* Plans */
++player(N): playAs(N)<-
+			!play(N).
 
-+!start:true <-
-	Jugador=0;//Selección de jugador 0 o 1
++player(N) : playAs(M) & not N==M <- .wait(300); .print("No es mi turno.").
++!play(P) <-
 	!jugadas(Njugadas);
 	!tamTablero(Tam);
-	!partida(Njugadas,Jugador,Tam).
-	
-+!partida(Njugadas,Jugador,Tam):Njugadas>0<-
-		if(Jugador == 0 & Njugadas == Tam/2){//Si es el primer turno con blancas
-			.print("Jugador:",Jugador,"Jugadas restantes:",Njugadas);
-			!jugar(1);
-			!partida(Njugadas-1,Jugador,Tam);
-		};
-		if(Jugador == 1 & Njugadas == Tam/2){//Si es el primer turno con negras
-			.wait(1000);
-			!jugar(0,Jugador); //Espera turno
-		};
-			!jugar(0,Jugador);//Espera turno
-			.print("Jugador:",Jugador,"Jugadas restantes:",Njugadas);
-			!jugar(1);
-			!partida(Njugadas-1,Jugador,Tam).
-		
-+!partida(0,Jugador,Tam)<-
-.print("Jugador:",Jugador," termina la partida.");
-.kill_agent(r0).
-
-
-
-	
-+!jugar(1)<-
-		.findall(q(C,D),queen(C,D),L);
-		?monta(L,Lista);
-		!tablero(X,Y);
-		?qfor(X,Y,Lista,ListaPosibles);
-		.print("Sin Limpiar: ",ListaPosibles);
-		?longitud(ListaPosibles,Long);
-		!aleatorio(Long-1,Num);
-		?elemrandom(ListaPosibles,Num,Ele);
-		?parset(Ele,Elx,Ely);
-		move_towards(Elx,Ely);
-		put(queen).
-		
-+!jugar(0,Jugador)<-
-	//!turnoActual(Turno);
-	.findall(N,player(N),L);
-	?turno(L,Turno);
-	?checkTurno(Jugador,Turno,T);
-	if(T==0){
-		!jugar(0,Jugador);//sigue esperando
-	};
-	if(T==1){
-		//Sale de aquí
-	}.
-
-	
-//+!turnoActual(Turno):player(Np)<-
-//Turno=Np.
+	.findall(q(C,D),queen(C,D),L);
+	?monta(L,Lista);
+	!tablero(X,Y);
+	?qfor(X,Y,Lista,ListaPosibles);
+	.print("Sin Limpiar: ",ListaPosibles);
+	?longitud(ListaPosibles,Long);
+	!aleatorio(Long-1,Num);
+	?elemrandom(ListaPosibles,Num,Ele);
+	?parset(Ele,Elx,Ely);
+	queen(Elx,Ely).
 
 +!jugadas(Njugadas):size(N)<-
 Njugadas=N/2.
@@ -157,6 +119,5 @@ Num= math.round(Y).
 	
 +!tamTablero(Tam):size(N)<-
 	Tam=N.
-
 
 
