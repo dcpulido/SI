@@ -1,3 +1,4 @@
+
 // Implementation of the example described in chapter 2
 // of the Jason's manual
 
@@ -7,13 +8,13 @@ MAS mars {
 
     environment: QueensEnv
     
-    agents:  r1;r2;//r0; 
-        //white  /home/sirope/Codigo/si/SI/practica3/p3/r0.asl [beliefs="playAs(0)"];
+    agents:  //r1;r2;//r0; 
+        blk1  /home/alumno/Escritorio/SI/practica3/p3/r0.asl [beliefs="playAs(0)"];
 
-        //black  /home/sirope/Codigo/si/SI/practica3/p3/r0.asl [beliefs="playAs(1)"];
+        blk2  /home/alumno/Escritorio/SI/practica3/p3/r0.asl [beliefs="playAs(1)"];
 
-        //white  /home/sirope/Codigo/si/SI/practica3/p3/r1.asl [beliefs="playAs(0)"];
+        white  /home/alumno/Escritorio/SI/practica3/p3/r1.asl [beliefs="playAs(0)"];
 
-        //black  /home/sirope/Codigo/si/SI/practica3/p3/r2.asl [beliefs="playAs(1)"];
+        black  /home/alumno/Escritorio/SI/practica3/p3/r1.asl [beliefs="playAs(1)"];
 
 }

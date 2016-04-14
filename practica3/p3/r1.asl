@@ -54,12 +54,15 @@ despieza(q(X,Y),X,Y).
 
 //limpiar(X, [X|Xs], Xs).
 //limpiar(X, [Y|Ys], [Y|Zs]):- limpiar(X, Ys, Zs).
-
+miembro(X,[X|_]).
+miembro(X,[_|Y]):- miembro(X,Y).
 
 concat([], Cs, Cs).
-
 concat([A|As],Bs,[A|Cs]):-
           concat(As, Bs, Cs).
+diferencia([],_,[]).
+diferencia([A|B],K,M):- miembro(A,K)& diferencia(B,K,M).
+diferencia([A|B],K,[A|M]):- not(miembro(A,K))& diferencia(B,K,M).
 
 elemrandom(L,N,E):-//rdn(L,N)&
 				get(L,N,E).
@@ -81,7 +84,7 @@ checkTurno(Jugador,Turno,0):- not(Jugador=Turno).
 
 turno([Car|Cdr],Car).
 
-playAs(0).
+igual(X,X).
 
 /* Initial goal */
 !start.
@@ -96,13 +99,27 @@ playAs(0).
 	.findall(q(C,D),queen(C,D),L);
 	?monta(L,Lista);
 	!tablero(X,Y);
-	?qfor(X,Y,Lista,ListaPosibles);
-	.print("Sin Limpiar: ",ListaPosibles);
-	?longitud(ListaPosibles,Long);
-	!aleatorio(Long-1,Num);
-	?elemrandom(ListaPosibles,Num,Ele);
-	?parset(Ele,Elx,Ely);
-	queen(Elx,Ely).
+	?qfor(X,Y,Lista,ListaA);
+
+	.findall(q(C,D),block(C,D),LB);
+	?monta(LB,ListaB);
+	.print(ListaB);
+	
+	/*no funciona la diferencia de listas*/
+	if(.empty(ListaB)){?igual(ListaA,ListaPosibles);}
+	else{?diferencia(ListaA,ListaB,ListaPosibles);}
+
+	if(.empty(ListaPosibles)){
+		.print(Fin);
+	}else{
+		.print("Sin Limpiar: ",ListaPosibles);
+		?longitud(ListaPosibles,Long);
+		!aleatorio(Long-1,Num);
+		?elemrandom(ListaPosibles,Num,Ele);
+		?parset(Ele,Elx,Ely);
+		queen(Elx,Ely);
+	}.
+	
 
 
 +!jugadas(Njugadas):size(N)<-
