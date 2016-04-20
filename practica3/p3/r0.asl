@@ -86,7 +86,7 @@ checkTurno(Jugador,Turno,0):- not(Jugador=Turno).
 
 turno([Car|Cdr],Car).
 
-playAs(0).
+
 
 /* Initial goal */
 !start.
@@ -117,7 +117,12 @@ playAs(0).
 		!aleatorio(Long-1,Num);
 		?elemrandom(ListaPosibles,Num,Ele);
 		?parset(Ele,Elx,Ely);
-		block(Elx,Ely);
+		if(bloqueo([Elx,Ely],ListaA)){
+			!play(P);
+		}
+		else{
+			block(Elx,Ely);
+		}
 	}.
 	
 

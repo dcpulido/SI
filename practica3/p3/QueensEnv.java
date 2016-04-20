@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class QueensEnv extends Environment {
 
-    public static final int GSize  =   8; // grid size
+    public static final int GSize  =   4; // grid size
     public static final int EMPTY  =   8; // empty cell code in grid model
     public static final int ATACK  =  16; // empty cell code in grid model
     public static final int HOLE   =  32; // hole in a cell code in grid model

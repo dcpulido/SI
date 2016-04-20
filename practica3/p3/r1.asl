@@ -86,6 +86,9 @@ turno([Car|Cdr],Car).
 
 igual(X,X).
 
+bloqueo([X,Y],[[X,Y]|_]).
+bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
+
 /* Initial goal */
 !start.
 +!start: true <- +player(0).
@@ -105,7 +108,7 @@ igual(X,X).
 	?monta(LB,ListaB);
 	.print(ListaB);
 	
-	/*no funciona la diferencia de listas*/
+	
 	if(.empty(ListaB)){?igual(ListaA,ListaPosibles);}
 	else{?diferencia(ListaA,ListaB,ListaPosibles);}
 
@@ -117,7 +120,12 @@ igual(X,X).
 		!aleatorio(Long-1,Num);
 		?elemrandom(ListaPosibles,Num,Ele);
 		?parset(Ele,Elx,Ely);
-		queen(Elx,Ely);
+		if(bloqueo([Elx,Ely],ListaB)){
+			!play(P);
+		}
+		else{
+			queen(Elx,Ely);
+		}
 	}.
 	
 
