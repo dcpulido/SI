@@ -52,24 +52,20 @@ monta([Car|Cdr],[[X,Y]|L]):- despieza(Car,X,Y) &
 despieza([],[],[]).
 despieza(q(X,Y),X,Y).
 
-//limpiar(X, [X|Xs], Xs).
-//limpiar(X, [Y|Ys], [Y|Zs]):- limpiar(X, Ys, Zs).
 miembro(X,[X|_]).
 miembro(X,[_|Y]):- miembro(X,Y).
 
 concat([], Cs, Cs).
 concat([A|As],Bs,[A|Cs]):-
           concat(As, Bs, Cs).
+		  
 diferencia([],_,[]).
 diferencia([A|B],K,M):- miembro(A,K)& diferencia(B,K,M).
 diferencia([A|B],K,[A|M]):- not(miembro(A,K))& diferencia(B,K,M).
 
-elemrandom(L,N,E):-//rdn(L,N)&
+elemrandom(L,N,E):-
 				get(L,N,E).
 				
-//rdn(L,N):- longitud(L,X)&
-//		N=random(X).
-		
 get([Car|Cdr],0,Car).
 get([Car|Cdr],N,X):- N1=N-1 &
 				get(Cdr,N1,X).
@@ -78,11 +74,6 @@ longitud([],0).
 longitud([_|T],N):-longitud(T,N0) & N=N0 + 1.
 
 parset([X,Y],X,Y).
-
-checkTurno(Jugador,Turno,1):- Jugador = Turno.
-checkTurno(Jugador,Turno,0):- not(Jugador=Turno).
-
-turno([Car|Cdr],Car).
 
 igual(X,X).
 

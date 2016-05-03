@@ -9,12 +9,12 @@ MAS mars {
     environment: QueensEnv
     
     agents:  //r1;r2;//r0; 
-        blk1  /home/sirope/Codigo/si/SI/practica3/p3/r0.asl [beliefs="playAs(0)"];
+        blk1  C:\Users\kurdakri\Desktop\SI\Repositorio\SI\practica3\p3\r0.asl [beliefs="playAs(0)"];
 
-        blk2  /home/sirope/Codigo/si/SI/practica3/p3/r0.asl [beliefs="playAs(1)"];
+        blk2  C:\Users\kurdakri\Desktop\SI\Repositorio\SI\practica3\p3\r0.asl [beliefs="playAs(1)"];
 
-        white  /home/sirope/Codigo/si/SI/practica3/p3/r1.asl [beliefs="playAs(0)"];
+        white  C:\Users\kurdakri\Desktop\SI\Repositorio\SI\practica3\p3\r1.asl [beliefs="playAs(0)"];
 
-        black  /home/sirope/Codigo/si/SI/practica3/p3/r1.asl [beliefs="playAs(1)"];
+        black  C:\Users\kurdakri\Desktop\SI\Repositorio\SI\practica3\p3\r1.asl [beliefs="playAs(1)"];
 
 }
