@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/HTML; charset=iso-8859-1"  />
+</head>
+<body>
+<p><span style="font-size: medium;"><strong>Last evolution.-</strong></span></p>
+<p>Vamos a continuar con el desarrollo del juego de las reinas de ajedrez en un tablero de 4N.</p>
+<p>Cada grupo de alumnos tendr&aacute; asignado un rol de juego:</p>
+<ul>
+<li>Jugador (blancas o negras).- Tratar&aacute; de colocar el mayor n&uacute;mero posible de reinas (hasta 2N) en el tablero sin que se ataquen entre s&iacute;, ni sean atacadas por otras reinas.</li>
+<li>Configurador.- Su misi&oacute;n ser&aacute; modificar el tablero mediante la colocaci&oacute;n de dos tipos de celdas especiales: muros y agujeros&nbsp;<br />Ambas celdas impiden que se coloque encima una reina. <br />Los muros permiten crear refugios en el ataque de reinas, los agujeros no impiden el ataque.<br />El configurador podr&aacute; poner como m&aacute;ximo N piezas nuevas en el tablero entre bloques y agujeros</li>
+</ul>
+<p>La evaluaci&oacute;n de la pr&aacute;ctica incluir&aacute; una competici&oacute;n entre los programas desarrollados por los distintos grupos. Se desarrollar&aacute; en un n&uacute;mero no inferior a 10 rondas en las que se alternar&aacute;n los colores y roles de los grupos (blancas siempre empiezan moviendo, despues los configuradores mientras puedan -en esta competici&oacute;n deben respetar su turno de juego, aunque pueden decidir no mover; se entender&aacute; que pasa turno si no ha movido en 5 segundos- y negras cierran el ciclo de movimientos)</p>
+<!-- content: html tiny_mce -->
+<p>Cada jugador colocar&aacute;&nbsp;<strong>una</strong>&nbsp;<strong>pieza por turno.</strong></p>
+<ul>
+<li><span><span><em><strong>Si el programa no verifica las reglas, se considerar&aacute; que la pr&aacute;ctica est&aacute; suspensa.</strong></em></span></span></li>
+<li><strong><em>Si alguno de los jugadores o el configurador intenta hacer trampas perder&aacute; la partida y la pr&aacute;ctica se considerar&aacute; no superada.</em></strong></li>
+<li><strong><em>Los jugadores que juegan con blancas o negras ganan si se dan las mismas circunstancias que en las pr&aacute;cticas anteriores</em></strong></li>
+<li><strong><em>El configurador no puede ganar la partida, solo decidirla. Para ello mantendr&aacute; una comunicaci&oacute;n constante con los jugadores e intentar&aacute; colocar sus fichas en las posiciones que acuerde con ellos.</em></strong></li>
+<li><strong><em>El configurador puede llegar a acuerdos con un jugador diferente en cada turno hasta que agote sus movimientos.</em></strong></li>
+<li><strong><em>El configurador llegar&aacute; a un acuerdo con el jugador que le ofrezca la jugada que permita maximizar una funci&oacute;n de beneficio que calcule la razon entre las posiciones ganadoras para negras y las posiciones ganadoras para blancas en la siguiente jugada despues de haber escogido la propuesta de blancas o de negras. Si no consigue determinar que existe una posici&oacute;n ganadora para ninguna de las porpuestas realizar&aacute; un movimiento de colocar un bloque en una de las celdas no atacadas del tablero.</em></strong></li>
+<li><strong><em>Una posici&oacute;n es ganadora cuando al escoger esa celda en la siguiente jugada, el jugador que la realiz&oacute; tiene una estrategia ganadora (existe una combinaci&oacute;n de colocaci&oacute;n de reinas sin que se a&ntilde;adan m&aacute;s bloques o agujeros) que le permite ganar la partida.</em></strong></li>
+<li><strong><em>Para realizar la comunicaci&oacute;n los agentes utilizar&aacute;n los siguientes mensajes:</em></strong></li>
+<ul>
+<li><strong><em>.send(configurer, tell, block(X,Y)),, X es la fila e Y la columna de la posici&oacute;n del tablero en que se quiere poner el bloque</em></strong></li>
+<li><strong><em>.send(configurer, tell, hole(X,Y))<strong><em>,, X es la fila e Y la columna de la posici&oacute;n del tablero en que se quiere poner el agujero</em></strong></em></strong></li>
+<li><strong><em>.send(Ag, tell, accept),, Ag = {white, black}</em></strong></li>
+<li><strong><em>.send(Ag, tell, decline)<strong><em>,, Ag = {white, black}</em></strong></em></strong></li>
+</ul>
+</ul></body></html>
