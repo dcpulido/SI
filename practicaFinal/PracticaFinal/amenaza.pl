@@ -19,40 +19,47 @@ qfor2(X,Y,LQ,LB,K):-	X1 is X+1 ,
 						qfor2(X1,Y,LQ,LB,R).
 
 
-mirafila(X,0,L,[],S):-	ataca([X,0],L,S).
-mirafila(X,0,_,[[X,0]],_).
-mirafila(X,Y,L,MF,S):-	Y1 is Y-1 ,
-						ataca([X,Y],L,S) ,
-						mirafila(X,Y1,L,MF,S).
-mirafila(X,Y,L,[[X,Y]|MF],S):-	Y1 is Y-1 ,
-								mirafila(X,Y1,L,MF,S).
+mirafila(X,0,LQ,LB,[],S):-	ataca([X,0],LQ,LB,S).
+mirafila(X,0,_,_,[[X,0]],_).
+mirafila(X,Y,LQ,LB,MF,S):-	Y1 is Y-1 ,
+						ataca([X,Y],LQ,LB,S) ,
+						mirafila(X,Y1,LQ,LB,MF,S).
+mirafila(X,Y,LQ,LB,[[X,Y]|MF],S):-	Y1 is Y-1 ,
+								mirafila(X,Y1,LQ,LB,MF,S).
 
-ataca([],[],_).
-ataca([X,_],[[X,_]|_],_).
-ataca([_,Y],[[_,Y]|_],_).
-
-ataca(Q,[Car|Cdr],P):-	ataca(Q,Cdr,P)|
-						atacaDiag(Q,P,[Car|Cdr]).
-
-atacaDiag([X1,X2],P,[[C1,C2]|R]):-	comprueba(X1,X2,P,[[C1,C2]|R]);
-								    nextlvl([X1,X2],P,[[C1,C2]|R]).
-
-nextlvl([X1,X2],P,[[C1,C2]|R]):-P>0 ,
-								P1 is P-1 , 
-								atacaDiag([X1,X2],P1,[[C1,C2]|R]).
+ataca([],[],_,_).
+ataca([X,Z],[[X,Y]|R],LB,S):- mayorque(Z,Y,R1),
+							menorque(Z,Y,R2),
+							not(hayBloqueVertical(X,R2,R1,LB)).
+ataca([Z,Y],[[X,Y]|R],LB,S):-mayorque(Z,X,R1),
+							menorque(Z,X,R2),
+							not(hayBloqueHorizontal(Y,R2,R1,LB)).
+ataca([Z,Y],[[A,B]|R],LB,S):- Z-A =:= Y-B,not(hayBloqueDiagonal([Z,Y],[A,B],LB)).
+ataca(Q,[Car|Cdr],LB,P):-	ataca(Q,Cdr,LB,P).
 
 
+hayBloqueDiagonal([Z,Y],[A,B],[[BX,BY]|R]):-Z-BX =:= Y-BY,
+											menorque(Z,A,R1),
+											mayorque(Z,A,R2),
+											medio(BX,R1,R2).
+hayBloqueDiagonal([Z,Y],[A,B],[[_,_]|R]):-hayBloqueDiagonal([Z,Y],[A,B],R).
 
-comprueba(X1,X2,P,[[C1,C2]|R]):-comprueba1(X1,X2,P,C1,C2);
-						  		comprueba2(X1,X2,P,C1,C2);
-						  		comprueba3(X1,X2,P,C1,C2);
-			   			  		comprueba4(X1,X2,P,C1,C2);
-						  		comprueba5(X1,X2,P,C1,C2);
-						  		comprueba(X1,X2,P,R).
+hayBloqueVertical(X,R1,R2,[[X,K]|_]):-menor(K,R2),
+									  mayor(K,R1).
+hayBloqueVertical(X,R1,R2,[[_,_]|R]):-hayBloqueVertical(X,R1,R2,R).
 
+hayBloqueHorizontal(X,R1,R2,[[K,X]|_]):-menor(K,R2),
+										mayor(K,R1).
+hayBloqueHorizontal(X,R1,R2,[[_,_]|R]):-hayBloqueHorizontal(X,R1,R2,R).
+								
 
-comprueba1(X1,X2,P,C1,C2):-	X1 is C1+P , X2 is C2+P.
-comprueba2(X1,X2,P,C1,C2):-	X1 is C1-P , X2 is C2+P.
-comprueba3(X1,X2,P,C1,C2):-	X1 is C1+P , X2 is C2-P.
-comprueba4(X1,X2,P,C1,C2):-	X1 is C1-P , X2 is C2-P.
-comprueba5(X1,X2,_,C1,C2):-	X1 is C1 , X2 is C2.				
+medio(X,Y,Z):-X>Y,X<Z.								
+
+menor(X,Y):-Y>X.
+mayor(X,Y):-X>Y.
+
+mayorque(X,Y,X):-X>Y.
+mayorque(X,Y,Y):-Y>=X.
+
+menorque(X,Y,X):-X<Y.
+menorque(X,Y,Y):-Y=<X.								
