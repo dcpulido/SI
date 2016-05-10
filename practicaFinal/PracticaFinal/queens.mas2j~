@@ -14,10 +14,10 @@ MAS queens {
 		
         //block r0.asl;
 
-       // white configurer.asl [beliefs="playAs(0)"];
+        white configurer.asl [beliefs="playAs(0)"];
 
-        //black configurer.asl [beliefs="playAs(1)"];
+        black configurer.asl [beliefs="playAs(1)"];
 
-        //configurer;
-		r1;
+        configurer;
+
 }
