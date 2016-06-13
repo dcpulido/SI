@@ -56,16 +56,17 @@ miembro(X,[X|_]).
 miembro(X,[_|Y]):- miembro(X,Y).
 
 concat([], Cs, Cs).
+
 concat([A|As],Bs,[A|Cs]):-
           concat(As, Bs, Cs).
-		  
+
 diferencia([],_,[]).
 diferencia([A|B],K,M):- miembro(A,K)& diferencia(B,K,M).
 diferencia([A|B],K,[A|M]):- not(miembro(A,K))& diferencia(B,K,M).
 
-elemrandom(L,N,E):-
-				get(L,N,E).
+elemrandom(L,N,E):- get(L,N,E).
 				
+		
 get([Car|Cdr],0,Car).
 get([Car|Cdr],N,X):- N1=N-1 &
 				get(Cdr,N1,X).
@@ -74,11 +75,6 @@ longitud([],0).
 longitud([_|T],N):-longitud(T,N0) & N=N0 + 1.
 
 parset([X,Y],X,Y).
-
-igual(X,X).
-
-bloqueo([X,Y],[[X,Y]|_]).
-bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 
 /* Initial goal */
 !start.
@@ -95,13 +91,11 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 	!tablero(X,Y);
 	?qfor(X,Y,Lista,ListaA);
 
+
 	.findall(q(C,D),block(C,D),LB);
 	?monta(LB,ListaB);
-	.print(ListaB);
-	
-	
-	if(.empty(ListaB)){?igual(ListaA,ListaPosibles);}
-	else{?diferencia(ListaA,ListaB,ListaPosibles);}
+
+	?diferencia(ListaA,ListaB,ListaPosibles);
 
 	if(.empty(ListaPosibles)){
 		.print(Fin);
@@ -111,11 +105,11 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 		!aleatorio(Long-1,Num);
 		?elemrandom(ListaPosibles,Num,Ele);
 		?parset(Ele,Elx,Ely);
-		if(bloqueo([Elx,Ely],ListaB)){
+		if(bloqueo([Elx,Ely],ListaA)){
 			!play(P);
 		}
 		else{
-			queen(Elx,Ely);
+			block(Elx,Ely);
 		}
 	}.
 	
