@@ -114,19 +114,49 @@ insertar(X, Lista, [X|Lista]).
 
 
 /* Initial goal */
+/* Initial goal */
 !start.
-+!start: true <-+bandera; 
-				+player(0).
-/* Plans */
-+player(N):playAs(N) & bandera<- 
-					.print("Empiezo Turno.");
-					!play(N).
++!start: true <- +player(0);
+				!checkWhoAmI(K);
+				.print("yo soy",K);			
+				!play(P).
 
-+player(N) : playAs(M) & not N==M <- .wait(300); .print("Esperando Turno.").
+
++!turno(2):not playAs(0) & not playAs(1) & not player(N).
+		
++!turno(N):player(N) & playAs(N).
+
++!turno(3):playAs(M) & player(N) & not N==M <- .wait(200).
+
+
+
+
+
+
++!checkWhoAmI(2):not playAs(0)&not playAs(1)<-+jugo(1).
+					
++!checkWhoAmI(M):playAs(M).
+/* Plans */
 
 
 +!play(P) <-
-	-bandera;
+	!turno(N);
+
+	if(N>=3){
+		!play(P);
+	}
+	//!!CONFIGURADOOOOOOOOOR!!!
+	if(N=2){
+		.print("soy un gran configurador");
+		.send(black,tell,decline);
+		.send(white,tell,decline);
+		.wait(5000);
+
+	}else{
+
+
+
+	//JUGADOOOOOOOOOOOOR!!!!!!!!!
 	!tamTablero(Tam);
 	.findall(q(C,D),queen(C,D),L);
 	?monta(L,ListaQueens);
@@ -184,7 +214,7 @@ insertar(X, Lista, [X|Lista]).
 			}
 			else{
 				.print("Primer turno");
-				+bandera;
+				
 				queen(Rx,Ry);
 			}
 		}
@@ -195,7 +225,7 @@ insertar(X, Lista, [X|Lista]).
 				?elemrandom(ListaNewDiferencia,PosMayor,Bloque);
 				?parset(Bloque,Bx,By);
 				if(Bx == Rx & By == Ry){
-					+bandera;
+					
 					queen(Rx,Ry);
 				}else{
 					.print("Enviando solicitud de bloque en posicion:",Bx,By);
@@ -220,14 +250,15 @@ insertar(X, Lista, [X|Lista]).
 					if(.member([Rx,Ry],ListaFinal)){
 						.print("HE PERDIDO!!");
 					}else{
-						+bandera;
+						
 						queen(Rx,Ry);
 					}
 				}
 			}
 		}
 	}
-}.	
+	}
+	}.	
 		
 		
 	
