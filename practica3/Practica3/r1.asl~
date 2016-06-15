@@ -68,6 +68,7 @@ elemrandom(L,N,E):- get(L,N,E).
 get([Car|Cdr],0,Car).
 get([Car|Cdr],N,X):- N1=N-1 &
 				get(Cdr,N1,X).
+				
 		  
 longitud([],0).
 longitud([_|T],N):-longitud(T,N0) & N=N0 + 1.
@@ -81,12 +82,45 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 
 /* Initial goal */
 !start.
-+!start: true <- +player(0).
++!start: true <- +player(0);
+				!checkWhoAmI(K);
+				.print("yo soy",K);			
+				!play(P).
+
 /* Plans */
-+player(N):playAs(N)<-
-			!play(N).
-+player(N) : playAs(M) & not N==M <- .wait(300); .print("No es mi turno.").
++!turno(5): not player(N).
+
++!turno(2):not playAs(0) & not playAs(1) & player(N) & jugo(M)&not N==M<-
+			-jugo(M)[source(self)];
+			+jugo(N).
+			
+			
++!turno(N):player(N) & playAs(N).
+
++!turno(3):playAs(M) & player(N) & not N==M <- .print("No es mi turno.").
+
++!turno(4): player(M) & jugo(M) <- .print("Estoy esperando.").
+
+
+
+
+
++!checkWhoAmI(2):not playAs(0)&not playAs(1)<-+jugo(1).
+					
++!checkWhoAmI(M):playAs(M).
+		
+//+player(N) : playAs(M) & not N==M <- .print("No es mi turno.").
+
 +!play(P) <-
+	!turno(N);
+
+	if(N>3){
+		!play(P);
+	}
+	if(N<0){
+		!play(P);
+	}
+	.print(N);
 	!jugadas(Njugadas);
 	!tamTablero(Tam);
 	.findall(q(C,D),queen(C,D),L);
@@ -105,21 +139,38 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 	if(.empty(ListaPosibles)){
 		.print(Fin);
 	}else{
-		.print("Sin Limpiar: ",ListaPosibles);
 		?longitud(ListaPosibles,Long);
 		!aleatorio(Long-1,Num);
 		?elemrandom(ListaPosibles,Num,Ele);
 		?parset(Ele,Elx,Ely);
 		.findall(q(C,D),block(C,D),LK);
 		?monta(LK,Lis);
+		.findall(q(C,D),queen(C,D),LQ);
+		?monta(LQ,LisQ);
 		if(bloqueo([Elx,Ely],Lis)){
+			.print("rompe en bloque");
+			!play(P);
+		}
+		if(bloqueo([Elx,Ely],LisQ)){
+			.print("rompe en reina");
 			!play(P);
 		}
 		else{
-			queen(Elx,Ely);
+			
+			if(N<=1){
+				queen(Elx,Ely);
+				-player(0)[source(self)];
+				!play(P);
+			}
+			if(N=2){
+				block(Elx,Ely);	
+				!play(P);
+			}
+			!play(P);
 		}
+		
 	}.
-	
+
 
 
 +!jugadas(Njugadas):size(N)<-

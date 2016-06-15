@@ -109,15 +109,11 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 					
 +!checkWhoAmI(M):playAs(M).
 		
-//+player(N) : playAs(M) & not N==M <- .print("No es mi turno.").
 
 +!play(P) <-
 	!turno(N);
 
 	if(N>3){
-		!play(P);
-	}
-	if(N<0){
 		!play(P);
 	}
 	.print(N);
