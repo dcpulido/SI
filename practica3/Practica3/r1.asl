@@ -97,9 +97,9 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 			
 +!turno(N):player(N) & playAs(N).
 
-+!turno(3):playAs(M) & player(N) & not N==M <- .print("No es mi turno.").
++!turno(3):playAs(M) & player(N) & not N==M <- .wait(200).
 
-+!turno(4): player(M) & jugo(M) <- .print("Estoy esperando.").
++!turno(4): player(M) & jugo(M) <- .wait(200).
 
 
 
@@ -113,7 +113,7 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 +!play(P) <-
 	!turno(N);
 
-	if(N>3){
+	if(N>=3){
 		!play(P);
 	}
 	.print(N);
