@@ -1,0 +1,14 @@
+// Implementation of the example described in chapter 2
+// of the Jason's manual
+
+MAS queens {
+
+    infrastructure: Centralised
+
+    environment: QueensEnv
+    
+    agents: 
+		white r1.asl [beliefs="playAs(0)"];
+		black r1.asl [beliefs="playAs(1)"];
+		configurer r0.asl;
+}

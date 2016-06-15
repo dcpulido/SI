@@ -193,11 +193,13 @@ public class QueensEnv extends Environment {
  			Literal attackCell;
 			for (int j = 0; j < GSize; j++) {
 					//if (hasObject(ATACK, x, j) &  !attacked(x,j)) {
+						// libera una posici�n vertical que ha sido  bloqueada
 						//freeAttack(x, y);
 					//}
 			};
 			for (int j = 0; j < GSize; j++) {
 					//if (hasObject(ATACK, j, y) &  !attacked(j,y)) {
+						// libera una posici�n horizontal que ha sido  bloqueada
 						//freeAttack(x, y);
 					//}
 			};
