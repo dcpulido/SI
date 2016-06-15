@@ -110,7 +110,9 @@ bloqueo([X,Y],[_|Cdr]):-bloqueo([X,Y],Cdr).
 		!aleatorio(Long-1,Num);
 		?elemrandom(ListaPosibles,Num,Ele);
 		?parset(Ele,Elx,Ely);
-		if(bloqueo([Elx,Ely],ListaB)){
+		.findall(q(C,D),block(C,D),LK);
+		?monta(LK,Lis);
+		if(bloqueo([Elx,Ely],Lis)){
 			!play(P);
 		}
 		else{
