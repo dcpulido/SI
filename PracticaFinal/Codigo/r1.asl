@@ -162,12 +162,100 @@ insertar(X, Lista, [X|Lista]).
 			.wait(1000);
 			!turno(N2);
 			if(N2==2){
-				.print("soy un gran configurador");
-				.send(black,tell,decline);
-				.send(white,tell,decline);
-				block(0,0);
+//recuperar percepts
+				.print("recupero percepts");
+				.findall(b(X,Y),block(X,Y)[source(white)],LBlockWhite);
+				.findall(b(X,Y),block(X,Y)[source(black)],LBlockBlack);
+				.findall(b(X,Y),hole(X,Y)[source(white)],LHoleWhite);
+				.findall(b(X,Y),hole(X,Y)[source(black)],LHoleBlack);
+				.print("Block white",LBlockWhite);
+				.print("Block black",LBlockBlack);
+				.print("Hole white",LHoleWhite);
+				.print("Hole black",LHoleBlack);
+				
+				//generar mi opcion
+				//reinas
+				.findall(q(C,D),queen(C,D),ReinasSinMontar);
+				?monta(ReinasSinMontar,ListaReinas);
+				//bloques
+				!tablero(X,Y);
+				.findall(q(C,D),block(C,D),BloquesSinMontar);
+				?monta(BloquesSinMontar,ListaBloques);
+				//holes
+				.findall(q(C,D),hole(C,D),HolesSinMontar);
+				?monta(HolesSinMontar,ListaBujeros);
+				//tablero
+				?qfor(X,Y,[],[],PosicionesTablero);
+				//piezas
+				?concat(ListaReinas,ListaBloques,Media);
+				?concat(Media,ListaBujeros,PiezasTablero);
+				//posiciones sin ocupar por piezas
+				?diferencia(PosicionesTablero,PiezasTablero,PosicionesSinPiezasTablero);
+				//comprobaciones
+				if(.empty(PosicionesSinPiezasTablero)){.print("HE PERDIDO!!");}
+				else{
+					//compruebo los posibles para sacar la referencia
+					?qfor(X,Y,ListaReinas,ListaBloques,ListaLibresAntesBujeros);
+					//hago diferencia con las posiciones de agujeros si existen
+					if(.empty(ListaBujeros)){?igual(ListaLibresAntesBujeros,ListaPos);}
+					else{?diferencia(ListaLibresAntesBujeros,ListaBujeros,ListaPos);}
+					//saco la long de la lista de posiciones sin amenazar para tener una referencia
+					?longitud(ListaPos,Ref);
+					//hago feach con todas las posiciones no ocupadas
+					?feach(PosicionesSinPiezasTablero,X,Y,ListaReinas,ListaBloques,[],ListaTamanos);
+					//compruebo cual es mas geniol
+					?mayorPosicionLista(0,ListaTamanos,Ref,-1,Mayor);
+					if(mayor==-1){
+						//si no hay ninguna way tiro por HOLES
+						.print("holes: no hagoi nada");
+						!play(P);
+					}else{
+						//si hay alguna chachy tiro por BLOQUES
+						?elemrandom(PosicionesSinPiezasTablero,Mayor,BloqueAPonerConfigurador);
+						?parset(BloqueAPonerConfigurador,Bapx,Bapy);
+						//evaluar opciones
+						if(.empty(LBlockWhite)){
+							.print("no puedo comparar la mia con white");
+							.send(white,tell,decline);
+							?concat([LBlockWhite],[[Bapx,Bapy]],LIntermedia);
+						}else{
+							?concat([LBlockWhite],[[Bapx,Bapy]],LIntermedia);
+						}
+						if(.empty(LBlockBlack)){
+							.print("no puedo comparar la mia con Black");
+							.send(black,tell,decline);
+							?concat([LBlockBlack],LIntermedia,LFinal);
+						}else{
+							?concat([LBlockBlack],LIntermedia,LFinal);
+						}
+						//metemos en la lista LFinal las tres opciones si existen y las comprobamos con el fantastico feach
+						?feach(LFinal,X,Y,ListaReinas,ListaBloques,[],ListaTamanosFinales);
+						//compruebo cual es mas geniol
+						?mayorPosicionLista(0,ListaTamanosFinales,Ref,-1,MayorFinal);
+						?elemrandom(LFinal,MayorFinal,BloqueFinalisimo);
+						//COMPROBAR FORMATYOS PARA LAS COMPROBACIONES
+						if(BloqueFinalisimo==LBlockBlack){
+							.send(white,tell,decline);
+							.send(black,tell,accept);
+						}else{
+							if(BloqueFinalisimo==LBlockWhite){
+								.send(black,tell,decline);
+								.send(white,tell,accept);
+							}else{
+								.send(black,tell,decline);
+								.send(white,tell,decline);
+							}
+						}
+						?parset(BloqueFinalisimo,Fx,Fy);
+						block(Fx,Fy);
+					}
+					
+				}
+				
+				//actuar
 				.wait(4000);
 				.print("Termino turno configurador.");
+				
 			}
 			!play(P);
 			
@@ -211,7 +299,7 @@ insertar(X, Lista, [X|Lista]).
 	//ListaDiferencia=Posiciones amenazadas y no amenazadas libres
 	
 	//Si hay piezas en todas las posiciones, se acaba el juego
-	if(.empty(ListaDiferencia)){.print("HE PERDIDO!!");}
+	if(.empty(ListaDiferencia)){.print("HE PERDIDO!!"); .suspend;}
 	else{
 	.print("trace4");
 	if(.empty(ListaPosibles)){
@@ -228,7 +316,7 @@ insertar(X, Lista, [X|Lista]).
 		
 		
 		//Montamos la base para calcular la pos de bloque
-		?concat(ListaQueens,Reina,ListaNewQueens);
+		?concat(ListaQueens,[Reina],ListaNewQueens);
 		?qfor(X,Y,ListaNewQueens,ListaBlocks,ListaNewLibresAntesHoles);
 		
 		if(.empty(ListaHoles)){?igual(ListaLibresAntesHoles,ListaNewPosibles);}
@@ -242,27 +330,83 @@ insertar(X, Lista, [X|Lista]).
 		?feach(ListaNewDiferencia,X,Y,ListaNewQueens,ListaBlocks,[],ListaTam);
 		?mayorPosicionLista(0,ListaTam,Referencia,-1,PosMayor);
 		.print("trace9");
+		.print("PosMayor",PosMayor);
 		if(PosMayor == -1){
-		.print("trace7");
-		-player(0)[source(self)];
-		queen(Rx,Ry);
-		!play(P);
-		
+			.print("trace7");
+			-player(0)[source(self)];
 			if(.empty(ListaNewDiferencia)){
-				.print("No posicion optima bloque!!");
+				.print("trace10");
+				
+					.findall(q(C,D),queen(C,D),L00);
+					?monta(L00,ListaQueens00);
+					.findall(q(C,D),block(C,D),LB00);
+					?monta(LB00,ListaBlocks00);
+					.findall(q(C,D),hole(C,D),LH00);
+					?monta(LH00,ListaHoles00);
+					?concat(ListaQueens00,ListaBlocks00,LInt00);
+					?concat(LInt00,ListaHoles00,ListaPiezas00);
+					if(bloqueo([Rx,Ry],ListaPiezas00)){
+						.print("Evitando colision");
+						!play(P);
+					}else{
+						queen(Rx,Ry);
+						!play(P);					
+					}
+				
+
+			}else{
+				.print("trace11");
+				?elemrandom(ListaNewDiferencia,0,Hole);
+				?parset(Hole,Hx,Hy);
+				.print("Solicitando Hole en",Hx,Hy);
+				.send(configurer,tell,hole(Hx,Hy));
+				
+				
+				.findall(q(C,D),queen(C,D),L01);
+				?monta(L01,ListaQueens01);
+				.findall(q(C,D),block(C,D),LB01);
+				?monta(LB01,ListaBlocks01);
+				.findall(q(C,D),hole(C,D),LH01);
+				?monta(LH01,ListaHoles01);
+				?concat(ListaQueens01,ListaBlocks01,LInt01);
+				?concat(LInt01,ListaHoles01,ListaPiezas01);
+				if(bloqueo([Rx,Ry],ListaPiezas01)){
+					.print("Evitando colision");
+					!play(P);
+				}else{
+					queen(Rx,Ry);
+					!play(P);					
+				}
+				
+				
 			}
+
 		}
 		else{
-		.print("trace8");
-				?elemrandom(ListaNewDiferencia,PosMayor,Bloque);
-				?parset(Bloque,Bx,By);
-				.print("Enviando solicitud de bloque en posicion:",Bx,By);
-				.send(configurer,tell,block(Bx,By));
-				//.wait(accept[source(configurer)] | decline[source(configurer)]);
-				//Asegurando que no se hace trampa{
-				-player(0)[source(self)];
-				queen(Rx,Ry);
-				!play(P);
+			.print("trace8");
+			?elemrandom(ListaNewDiferencia,PosMayor,Bloque);
+			?parset(Bloque,Bx,By);
+			.print("Enviando solicitud de bloque en posicion:",Bx,By);
+			.send(configurer,tell,block(Bx,By));
+			//.wait(accept[source(configurer)] | decline[source(configurer)]);
+			//Asegurando que no se hace trampa{
+			-player(0)[source(self)];
+			
+				.findall(q(C,D),queen(C,D),L02);
+				?monta(L02,ListaQueens02);
+				.findall(q(C,D),block(C,D),LB02);
+				?monta(LB02,ListaBlocks02);
+				.findall(q(C,D),hole(C,D),LH02);
+				?monta(LH02,ListaHoles02);
+				?concat(ListaQueens02,ListaBlocks02,LInt02);
+				?concat(LInt02,ListaHoles02,ListaPiezas02);
+				if(bloqueo([Rx,Ry],ListaPiezas02)){
+					.print("Me has jodido");
+					.suspend;
+				}else{
+					queen(Rx,Ry);
+					!play(P);					
+				}
 			}
 	}
 	}

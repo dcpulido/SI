@@ -132,7 +132,9 @@ insertar(X, Lista, [X|Lista]).
 	
 +!turno(7):playAs(0) & not player(N). 
 		
-+!turno(N):player(N) & playAs(N).
++!turno(0):player(0) & playAs(0).
+
++!turno(1):player(1) & playAs(1).
 
 +!turno(3):playAs(M) & player(N) & not N==M <- .wait(200).
 
@@ -151,24 +153,28 @@ insertar(X, Lista, [X|Lista]).
 		if(Res==1){
 			-player(0)[source(self)];
 		}
-
 		!play(P);	
 	}
+	
 	//!!CONFIGURADOOOOOOOOOR!!!
+	else{
 	if(N==2){
 			.wait(1000);
-			!turno(N);
-			if(N==2){
+			!turno(N2);
+			if(N2==2){
 				.print("soy un gran configurador");
 				.send(black,tell,decline);
 				.send(white,tell,decline);
+				block(0,0);
 				.wait(4000);
+				.print("Termino turno configurador.");
 			}
 			!play(P);
+			
 	}else{
 	
 	//JUGADOOOOOOOOOOOOR!!!!!!!!!
-	.print("Empiezo mi turno");
+	.print("Empiezo mi turno",N);
 	.count(accept[source(configurer)],Naccept);
 	.print("trace1");
 	.count(decline[source(configurer)],Ndecline);
@@ -210,6 +216,7 @@ insertar(X, Lista, [X|Lista]).
 	.print("trace4");
 	if(.empty(ListaPosibles)){
 		.print("HE PERDIDO!!");
+		.suspend;
 	}
 	else{
 	.print("trace5");
@@ -255,10 +262,11 @@ insertar(X, Lista, [X|Lista]).
 				//Asegurando que no se hace trampa{
 				-player(0)[source(self)];
 				queen(Rx,Ry);
+				!play(P);
 			}
 	}
 	}
-	}.	
+	}}.	
 		
 		
 	
