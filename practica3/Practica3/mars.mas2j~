@@ -9,12 +9,10 @@ MAS mars {
     environment: QueensEnv
     
     agents:  //r1;r2;//r0; 
-        blk1  r0.asl [beliefs="playAs(0)"];
+        bblacas  r1.asl [beliefs="playAs(0)"];
 
-        blk2  r0.asl [beliefs="playAs(1)"];
+        negras  r1.asl [beliefs="playAs(1)"];
 
-        white  r1.asl [beliefs="playAs(0)"];
-
-        black  r1.asl [beliefs="playAs(1)"];
+        conf  r1.asl;
 
 }
